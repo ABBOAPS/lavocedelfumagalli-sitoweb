@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Configurazione canali e site URL per la sitemap SEO
-const SITE_URL = 'https://abbo-aps.github.io/lavocedelfumagalli-siteweb'; // URL di esempio modificabile per GH Pages
+const SITE_URL = 'https://abboaps.github.io/lavocedelfumagalli-sitoweb'; // URL di esempio modificabile per GH Pages
 const CONTENT_DIR = './content';
 const OUT_DIR = './dist';
 
