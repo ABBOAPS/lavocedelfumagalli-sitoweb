@@ -455,7 +455,7 @@ let archiveHtml = `
         <p class="font-mono text-slate-500">Nessun articolo registrato.</p>
       </div>
     ` : articles.map((art, index) => `
-      <article class="border-4 border-black bg-white p-6 md:p-8 shadow-[6px_6px_0px_0px_#000] rounded-md relative ${index % 2 === 0 ? 'rotate-[-0.3deg]' : 'rotate-[0.3deg]'}">
+      <article id="${art.slug}" class="border-4 border-black bg-white p-6 md:p-8 shadow-[6px_6px_0px_0px_#000] rounded-md relative ${index % 2 === 0 ? 'rotate-[-0.3deg]' : 'rotate-[0.3deg]'}">
         
         <!-- Floating Post Label counter -->
         <span class="absolute -top-3 -left-3 bg-black text-rose-300 font-mono text-xs font-black border-2 border-rose-300 px-2.5 py-0.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded uppercase">
@@ -466,7 +466,12 @@ let archiveHtml = `
           <span class="font-mono text-xs font-extrabold bg-slate-900 text-white px-2.5 py-1 rounded inline-block">
             📅 DATA DI PUBBLICAZIONE: ${art.dateStr}
           </span>
-          ${art.tags.includes('prima-pagina') ? '<span class="bg-rose-500 border-2 border-black text-white px-2 py-0.5 text-xs font-black font-display uppercase rounded">PRIMA PAGINA</span>' : ''}
+          <div class="flex items-center gap-2">
+            ${art.tags.includes('prima-pagina') ? '<span class="bg-rose-500 border-2 border-black text-white px-2 py-0.5 text-xs font-black font-display uppercase rounded">PRIMA PAGINA</span>' : ''}
+            <button onclick="navigator.clipboard.writeText(window.location.origin + window.location.pathname + '#${art.slug}').then(() => { this.innerText = 'Copiato! ✓'; const btn = this; setTimeout(() => btn.innerText = 'Condividi 🔗', 2000); })" class="border-2 border-black bg-pink-300 hover:bg-pink-400 text-black px-3 py-1 text-xs font-black uppercase shadow-[2px_2px_0px_0px_#000] rounded transition-all active:translate-y-0.5 cursor-pointer">
+              Condividi 🔗
+            </button>
+          </div>
         </div>
         
         <h2 class="text-2xl md:text-3xl font-black font-display uppercase text-black leading-tight border-b-2 border-black pb-2">
@@ -514,12 +519,17 @@ let projectsHtml = `
         <p class="font-mono text-slate-500">Nessun progetto didattico trovato con la tag 'progetti'.</p>
       </div>
     ` : projectArticles.map((art, index) => `
-      <article class="border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-between rounded-md relative ${index % 2 === 0 ? 'rotate-[-0.5deg]' : 'rotate-[0.5deg]'}">
+      <article id="${art.slug}" class="border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-between rounded-md relative ${index % 2 === 0 ? 'rotate-[-0.5deg]' : 'rotate-[0.5deg]'}">
         
         <div>
-          <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center justify-between mb-3 gap-2">
             <span class="text-xs font-mono font-extrabold text-slate-500">🧪 PROGETTO SCOLASTICO</span>
-            <span class="text-xs font-mono font-bold bg-lime-100 text-lime-800 px-2 py-0.5 rounded border border-lime-300">${art.dateStr}</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono font-bold bg-lime-100 text-lime-800 px-2 py-0.5 rounded border border-lime-300">${art.dateStr}</span>
+              <button onclick="navigator.clipboard.writeText(window.location.origin + window.location.pathname + '#${art.slug}').then(() => { this.innerText = 'Copiato! ✓'; const btn = this; setTimeout(() => btn.innerText = 'Condividi 🔗', 2000); })" class="border-2 border-black bg-pink-300 hover:bg-pink-400 text-black px-2 py-0.5 text-[10px] font-black uppercase shadow-[1.5px_1.5px_0px_0px_#000] rounded transition-all active:translate-y-0.5 cursor-pointer">
+                Condividi 🔗
+              </button>
+            </div>
           </div>
           
           <h3 class="text-2xl font-black font-display text-black uppercase leading-snug border-b-2 border-black pb-2">

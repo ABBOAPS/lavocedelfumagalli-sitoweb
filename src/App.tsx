@@ -17,7 +17,8 @@ import {
   Heart,
   ChevronRight,
   BookOpen,
-  ArrowLeft
+  ArrowLeft,
+  Share2
 } from 'lucide-react';
 import { SITE_CONFIG } from './config';
 
@@ -204,6 +205,68 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeArchiveTag, setActiveArchiveTag] = useState<string | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [shareText, setShareText] = useState('Condividi 🔗');
+
+  // Read article from URL query params on mount
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const articleSlug = params.get('articolo');
+    if (articleSlug) {
+      const art = LOADED_ARTICLES.find(a => a.slug === articleSlug);
+      if (art) {
+        setSelectedArticle(art);
+      }
+    }
+  }, []);
+
+  // Update URL search parameters when selected article changes
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (selectedArticle) {
+      params.set('articolo', selectedArticle.slug);
+      window.history.replaceState(null, '', `?${params.toString()}`);
+    } else {
+      params.delete('articolo');
+      const newSearch = params.toString();
+      window.history.replaceState(null, '', newSearch ? `?${newSearch}` : window.location.pathname);
+    }
+    setShareText('Condividi 🔗');
+  }, [selectedArticle]);
+
+  const copyToClipboard = (url: string) => {
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        setShareText('Copiato! ✓');
+        setTimeout(() => setShareText('Condividi 🔗'), 2000);
+      })
+      .catch(() => {
+        setShareText('Errore copia ❌');
+        setTimeout(() => setShareText('Condividi 🔗'), 2000);
+      });
+  };
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const shareUrl = window.location.href;
+    if (navigator.share) {
+      navigator.share({
+        title: selectedArticle?.title || 'La Voce del Fumagalli',
+        text: selectedArticle?.description || 'Leggi l\'articolo su La Voce del Fumagalli',
+        url: shareUrl,
+      })
+      .then(() => {
+        setShareText('Condiviso! 🎉');
+        setTimeout(() => setShareText('Condividi 🔗'), 2000);
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') {
+          copyToClipboard(shareUrl);
+        }
+      });
+    } else {
+      copyToClipboard(shareUrl);
+    }
+  };
 
   // Chronologically sorted articles (newest first)
   const sortedArticles = useMemo(() => {
@@ -538,7 +601,7 @@ export default function App() {
           /* ================= PAGINA DETTAGLIO ARTICOLO (Pristine student reader) ================= */
           <div className="border-4 border-black bg-white p-5 sm:p-8 md:p-12 shadow-[8px_8px_0px_0px_#000] rounded-lg mt-2 relative overflow-hidden" id="article-detail-view">
             
-            {/* Back button */}
+            {/* Back button and Share button */}
             <div className="flex flex-wrap gap-3 items-center justify-between mb-8 pb-4 border-b-2 border-slate-100">
               <button 
                 onClick={() => {
@@ -548,6 +611,14 @@ export default function App() {
                 className="bg-cyan-300 hover:bg-cyan-400 hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] active:translate-y-0.5 active:shadow-[1px_1px_0px_#000] text-black font-black font-display text-xs sm:text-sm border-3 border-black px-4 py-2.5 rounded shadow-[3px_3px_0px_#000] transition-all cursor-pointer flex items-center gap-1.5 uppercase animate-pulse"
               >
                 ⬅️ Torna alla lista
+              </button>
+
+              <button 
+                onClick={handleShare}
+                className="bg-pink-300 hover:bg-pink-400 hover:-translate-y-1 hover:shadow-[4px_4px_0px_#000] active:translate-y-0.5 active:shadow-[1px_1px_0px_#000] text-black font-black font-display text-xs sm:text-sm border-3 border-black px-4 py-2.5 rounded shadow-[3px_3px_0px_#000] transition-all cursor-pointer flex items-center gap-1.5 uppercase"
+              >
+                <Share2 className="w-4 h-4 text-black" />
+                <span>{shareText}</span>
               </button>
             </div>
 
