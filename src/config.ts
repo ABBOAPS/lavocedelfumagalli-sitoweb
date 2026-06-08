@@ -86,13 +86,13 @@ export const SITE_CONFIG: SiteConfig = {
     body: "Questo portale è autoprodotto dai gruppi studenteschi con l'aiuto dei docenti di laboratorio per raccogliere i progetti, gli articoli e i racconti del Fumagalli."
   },
   survivalTipCard: {
-    title: "📒 SURVIVAL TIP #14",
+    title: "📒 Bla bla blah",
     quote: '"Se scordi la giacca nei laboratori, inventati che sei andato ad aiutare il tecnico coi PC. Nel 90% dei casi ti lascerà cercare in totale libertà!"',
     author: "— IL FUMAGALLIANO DI QUARTA"
   },
   scrupoloFilosofico: {
-    title: "📝 SCRUPOLO FILOSOFICO",
-    body: "Nessun database, nessun server. Carichiamo file Markdown puri ed il generatore compila tutto. Semplice!"
+    title: "📝 Non so cosa scrivere",
+    body: "è un bellissimo sito ecc ecc..."
   },
   footer: {
     primaryText: "🏫 IIS FUMAGALLI — LA VOCE DELLO STUDENTE",
