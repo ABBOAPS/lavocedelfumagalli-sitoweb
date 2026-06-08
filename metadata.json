@@ -1,0 +1,6 @@
+{
+  "name": "La Voce del Fumagalli",
+  "description": "Generatore di siti statici minimale e personalizzato con stile pop 'Ned Scuola di Sopravvivenza' per la webzine scolastica de Il Fumagalli. Offerto da ABBO APS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
