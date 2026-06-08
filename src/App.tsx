@@ -104,7 +104,10 @@ const parseMarkdownFile = (filepath: string, rawContent: string): Article => {
 };
 
 // Dynamic text parsing utilities to fill cards beautifully with text when they don't have images
-const getArticlePreviewText = (art: Article, paragraphsCount = 1) => {
+const getArticlePreviewText = (art: Article) => {
+  if (art.description && art.description !== 'Leggi l\'articolo completo su La Voce del Fumagalli.') {
+    return art.description;
+  }
   const paras = art.content.split('\n\n')
     .map(p => p.trim())
     .filter(p => {
@@ -113,12 +116,11 @@ const getArticlePreviewText = (art: Article, paragraphsCount = 1) => {
       if (p.startsWith('![')) return false;
       if (p.startsWith('---')) return false;
       if (p.startsWith('<')) return false;
-      if (p.startsWith('*')) return false;
+      if (p.startsWith('*') || p.startsWith('-') || p.startsWith('>')) return false;
       if (p.length < 15) return false; // skip headers or tiny fragments
       return true;
     });
-  // join the requested amount of paragraphs
-  return paras.slice(0, paragraphsCount).join(' ');
+  return paras[0] || '';
 };
 
 const getSpotlightBlocksToShow = (art: Article) => {
@@ -785,7 +787,7 @@ export default function App() {
                           >
                             {ordinaryArticles[0].title}
                           </h2>
-                          <p className="font-sans text-sm font-bold text-slate-850 mt-4 leading-relaxed">{getArticlePreviewText(ordinaryArticles[0], 2)}</p>
+                          <p className="font-sans text-sm font-bold text-slate-850 mt-4 leading-relaxed">{parseInline(getArticlePreviewText(ordinaryArticles[0]))}</p>
                         </div>
                       </div>
                     )
@@ -854,7 +856,7 @@ export default function App() {
                           {progettiArticles[0].title}
                         </h4>
                         <p className="text-slate-750 font-sans text-xs sm:text-[13px] font-bold mt-2 leading-relaxed line-clamp-3">
-                          {getArticlePreviewText(progettiArticles[0], 1)}
+                          {parseInline(getArticlePreviewText(progettiArticles[0]))}
                         </p>
                         <div className="mt-4 pt-3 border-t border-dashed border-slate-350 flex justify-between items-center text-xs font-mono">
                           <span className="font-black text-slate-600">⏱️ {progettiArticles[0].readTime}</span>
@@ -917,8 +919,8 @@ export default function App() {
                                 {art.title}
                               </h4>
                               
-                              <p className={`text-slate-755 font-sans text-xs sm:text-sm font-semibold leading-relaxed ${hasImage ? 'line-clamp-2 mt-2' : 'line-clamp-[11] sm:line-clamp-[12] md:line-clamp-[14] lg:line-clamp-[15] mt-2'} ${cardTheme.accentBorder}`}>
-                                {getArticlePreviewText(art, hasImage ? 1 : 99)}
+                              <p className={`text-slate-755 font-sans text-xs sm:text-sm font-semibold leading-relaxed ${hasImage ? 'line-clamp-2 mt-2' : 'line-clamp-5 mt-2'} ${cardTheme.accentBorder}`}>
+                                {parseInline(getArticlePreviewText(art))}
                               </p>
                             </div>
 
@@ -990,8 +992,8 @@ export default function App() {
                                 {art.title}
                               </h4>
                               
-                              <p className={`text-slate-755 font-sans text-xs sm:text-sm font-semibold leading-relaxed ${hasImage ? 'line-clamp-2 mt-2' : 'line-clamp-[11] sm:line-clamp-[12] md:line-clamp-[14] lg:line-clamp-[15] mt-2'} ${cardTheme.accentBorder}`}>
-                                {getArticlePreviewText(art, hasImage ? 1 : 99)}
+                              <p className={`text-slate-755 font-sans text-xs sm:text-sm font-semibold leading-relaxed ${hasImage ? 'line-clamp-2 mt-2' : 'line-clamp-5 mt-2'} ${cardTheme.accentBorder}`}>
+                                {parseInline(getArticlePreviewText(art))}
                               </p>
                             </div>
 
@@ -1117,7 +1119,7 @@ export default function App() {
                             <h3 className="text-xl sm:text-2xl font-black font-display text-slate-950 uppercase group-hover:text-pink-600 transition-colors">
                               {art.title}
                             </h3>
-                            <p className="text-xs sm:text-sm text-slate-600 font-sans font-bold leading-normal line-clamp-2 max-w-4xl">{getArticlePreviewText(art, 1)}</p>
+                            <p className="text-xs sm:text-sm text-slate-600 font-sans font-bold leading-normal line-clamp-2 max-w-4xl">{parseInline(getArticlePreviewText(art))}</p>
                           </div>
 
                           <div className="flex flex-row md:flex-col lg:flex-row items-center gap-3 w-full md:w-auto justify-between md:justify-center border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 shrink-0">
@@ -1185,8 +1187,8 @@ export default function App() {
                           <h3 className={`${art.image ? 'text-xl' : 'text-2xl sm:text-[25px]'} font-black font-display text-slate-950 leading-snug uppercase mb-2 group-hover:text-lime-600 transition-colors`}>
                             {art.title}
                           </h3>
-                          <p className={`text-slate-700 font-sans text-xs sm:text-sm font-semibold mb-4 leading-relaxed ${art.image ? 'line-clamp-3' : 'line-clamp-[10] sm:line-clamp-[12]'}`}>
-                            {getArticlePreviewText(art, art.image ? 1 : 99)}
+                          <p className={`text-slate-700 font-sans text-xs sm:text-sm font-semibold mb-4 leading-relaxed ${art.image ? 'line-clamp-3' : 'line-clamp-5'}`}>
+                            {parseInline(getArticlePreviewText(art))}
                           </p>
                         </div>
 
