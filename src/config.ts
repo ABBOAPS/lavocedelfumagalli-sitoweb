@@ -99,6 +99,6 @@ export const SITE_CONFIG: SiteConfig = {
     copyright: "Copyright 2026 • La voce del fumagalli",
     schoolRights: "Tutti i diritti degli articoli sono detenuti dall'I.I.S. Fumagalli.",
     creatorText: "Sito web creato da Abbo APS",
-    creatorUrl: "https://www.abbops.org"
+    creatorUrl: "https://www.abboaps.org"
   }
 };
